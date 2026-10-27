@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactive Network Error Detection and Correction Toolkit</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+:root{--ink:#142435;--muted:#627385;--paper:#f4f7fa;--white:#fff;--line:#e1e8ee;--blue:#2864e8;--blue2:#eaf0ff;--teal:#078b78;--teal2:#e8f7f3;--orange:#d67a20;--orange2:#fff4e7;--red:#ce4f51;--red2:#fff0ef;--purple:#7753c8;--purple2:#f2edff;--shadow:0 12px 35px #24384d0b}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px 'DM Sans',sans-serif}button,input,select{font:inherit}button{cursor:pointer}.shell{max-width:1320px;margin:auto;padding:24px 28px 60px}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:23px}.brand{display:flex;gap:12px;align-items:center}.logo{width:40px;height:40px;background:var(--blue);border-radius:13px;color:white;display:grid;place-items:center;font-weight:800;font-size:19px;box-shadow:0 5px 12px #2864e838}.brandname{font:700 18px 'Space Grotesk'} .brand small{display:block;color:var(--muted);font-size:11px;font-weight:500;letter-spacing:.04em;margin-top:2px}.topright{display:flex;align-items:center;gap:10px}.pill{background:white;border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:12px;color:#526274}.pill b{color:var(--teal)}
+.hero{display:flex;justify-content:space-between;align-items:end;margin:0 0 20px}.eyebrow{color:var(--blue);font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:11px;margin:0 0 8px}.hero h1{font:700 clamp(27px,4vw,38px) 'Space Grotesk';letter-spacing:-.04em;margin:0}.hero p{color:var(--muted);margin:8px 0 0;max-width:700px;line-height:1.55}.hero-note{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 13px;color:#627385;font-size:12px;max-width:250px;line-height:1.45}
+.tabs{display:flex;gap:5px;background:#e9eef3;padding:5px;border-radius:13px;width:max-content;margin-bottom:17px}.tab{border:0;background:transparent;color:#667788;padding:9px 16px;border-radius:9px;font-weight:700;font-size:13px}.tab.active{background:#fff;color:var(--ink);box-shadow:0 1px 5px #23374a15}.page{display:none}.page.active{display:block}
+.panel{background:white;border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}.setup{padding:19px 20px;margin-bottom:16px}.section-title{font:700 16px 'Space Grotesk';margin:0 0 14px}.row{display:grid;grid-template-columns:1.3fr 1.2fr auto;gap:14px;align-items:end}.field label{display:block;font-size:12px;color:#516476;font-weight:700;margin-bottom:7px}.field input,.field select{height:43px;border:1px solid #d8e1e9;border-radius:10px;background:white;color:var(--ink);padding:0 12px;width:100%;outline:none}.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #2864e818}.actions{display:flex;gap:8px}.btn{border:1px solid var(--line);background:white;color:var(--ink);border-radius:10px;padding:11px 14px;font-weight:700;font-size:13px;white-space:nowrap}.btn.primary{background:var(--blue);border-color:var(--blue);color:white}.btn:hover{filter:brightness(.97);transform:translateY(-1px)}.help{font-size:12px;color:var(--muted);line-height:1.5;margin:11px 0 0}.bitpreview{margin-top:14px;padding:12px 13px;background:#f7f9fb;border:1px solid #edf1f5;border-radius:12px}.bithead{display:flex;justify-content:space-between;color:#718294;font-size:11px;margin-bottom:8px}.bitrow{display:flex;gap:4px;flex-wrap:wrap}.bit{font:12px 'DM Mono';min-width:23px;height:26px;padding:4px 5px;display:grid;place-items:center;border-radius:6px;background:#eaf0f5;color:#3b5267;position:relative}.bitgroup{margin-right:7px}.bit.check{background:#fff0d9;color:#9a5d11;border:1px solid #f3d29f}.bit.injected{background:var(--red);color:white;box-shadow:0 0 0 2px #ce4f5133}.mutedline{color:#97a5b2;font-size:12px}
+.lanes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 16px}.method-card{background:white;border:1px solid var(--line);border-radius:14px;padding:13px;cursor:pointer;transition:.15s;position:relative}.method-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.method-card.selected{border-color:var(--blue);box-shadow:0 0 0 2px #2864e81b}.m-head{display:flex;justify-content:space-between;align-items:center}.m-head b{font:700 14px 'Space Grotesk'}.icon{width:28px;height:28px;border-radius:9px;background:var(--blue2);color:var(--blue);display:grid;place-items:center;font-size:13px;font-weight:800}.method-card:nth-child(2) .icon{background:var(--teal2);color:var(--teal)}.method-card:nth-child(3) .icon{background:var(--orange2);color:var(--orange)}.method-card:nth-child(4) .icon{background:var(--purple2);color:var(--purple)}.m-sub{font-size:11px;color:var(--muted);margin-top:7px}.m-status{margin-top:10px;font-size:11px;font-weight:700;color:#8898a8;min-height:15px}.m-status.good{color:var(--teal)}.m-status.bad{color:var(--red)}.m-status.fix{color:var(--purple)}
+.sim{padding:20px}.simhead{display:flex;justify-content:space-between;align-items:start;margin-bottom:16px}.simhead h2{font:700 19px 'Space Grotesk';margin:0}.simhead p{color:var(--muted);font-size:12px;margin:5px 0 0}.counter{font:12px 'DM Mono';color:#718294;background:#f5f7f9;border-radius:8px;padding:7px 10px}.track{display:grid;grid-template-columns:1fr 110px 1fr;gap:12px;align-items:stretch}.station{border:1px solid var(--line);border-radius:14px;padding:14px;min-height:190px;background:#fbfcfd}.station h3{font:700 13px 'Space Grotesk';margin:0 0 5px}.station .sub{font-size:11px;color:var(--muted);margin-bottom:13px}.station-bubble{border-radius:12px;padding:12px;background:white;border:1px solid #e8edf1;min-height:70px}.tinylabel{font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:800;color:#8190a0;margin-bottom:6px}.mono{font:12px 'DM Mono';overflow-wrap:anywhere;line-height:1.7;white-space:pre-wrap}.visual-tag{display:inline-flex;border-radius:99px;padding:5px 8px;font-size:10px;font-weight:800;margin-top:9px;background:var(--blue2);color:var(--blue)}.visual-tag.orange{background:var(--orange2);color:#a56310}.visual-tag.green{background:var(--teal2);color:var(--teal)}.channel{position:relative;display:grid;place-items:center;text-align:center}.wire{position:absolute;left:0;right:0;top:48%;height:3px;background:#d9e2eb}.packet{position:relative;width:50px;height:42px;border-radius:11px;background:var(--blue);color:white;display:grid;place-items:center;box-shadow:0 5px 15px #2864e83d;transition:.35s;z-index:1;font-size:18px}.packet.moving{transform:translateX(25px)}.channeltext{position:absolute;top:calc(48% + 29px);font-size:10px;color:#708195;font-weight:700}.channel .hazard{position:absolute;top:5px;color:var(--red);font-size:11px;font-weight:800;display:none}.channel.damaged .hazard{display:block}.channel.damaged .packet{background:var(--red);box-shadow:0 5px 15px #ce4f5133}.stepbox{display:grid;grid-template-columns:1fr 245px;gap:14px;margin-top:15px}.explain{background:#f7f9fb;border:1px solid #e9eef2;border-radius:13px;padding:14px 15px;min-height:100px}.explain .stepname{color:var(--blue);font-weight:800;font-size:11px;letter-spacing:.08em;text-transform:uppercase}.explain h3{font:700 16px 'Space Grotesk';margin:6px 0}.explain p{margin:0;color:#55687a;line-height:1.6;font-size:13px}.buttonstack{display:flex;flex-direction:column;gap:8px;justify-content:center}.buttonstack .btn{width:100%}.resultline{margin-top:14px;border:1px solid var(--line);padding:11px 13px;border-radius:11px;display:flex;gap:10px;align-items:center;font-size:13px;color:#627385}.resultline strong{color:var(--ink)}.resultline.good{background:var(--teal2);border-color:#cdebe2}.resultline.bad{background:var(--red2);border-color:#f2d4d2}.resultline.fix{background:var(--purple2);border-color:#ddd1ff}
+.lesson{padding:18px 20px;margin-top:15px}.lesson-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.lesson-card{padding:13px;border-radius:12px;border:1px solid var(--line);background:#fff}.lesson-card h3{font:700 13px 'Space Grotesk';margin:0 0 6px}.lesson-card p{font-size:12px;color:#5c6d7c;line-height:1.55;margin:0}.lesson-card .real{margin-top:8px;color:#34495d;font-size:11px;font-weight:700}.callout{padding:11px 13px;background:#fff8e9;border:1px solid #f4e4bd;border-radius:11px;color:#75541b;font-size:12px;line-height:1.55;margin-top:12px}
+.industry{padding:21px}.industry h2{font:700 21px 'Space Grotesk';margin:0 0 7px}.industry>p{color:var(--muted);font-size:13px;line-height:1.6;max-width:850px;margin-top:0}.stack{display:grid;gap:11px;margin-top:17px}.layer{display:grid;grid-template-columns:110px 1fr 1.1fr;gap:13px;align-items:center;background:#fbfcfd;border:1px solid var(--line);border-radius:13px;padding:14px}.layer-tag{font:700 12px 'Space Grotesk';color:var(--blue);background:var(--blue2);padding:8px 9px;border-radius:9px;text-align:center}.layer h3{font:700 14px 'Space Grotesk';margin:0 0 4px}.layer p{font-size:12px;line-height:1.5;color:#607183;margin:0}.layer .analogy{background:white;border:1px solid #e8edf1;border-radius:10px;padding:10px;color:#506173;font-size:12px;line-height:1.5}.layer .analogy b{color:var(--ink)}.standardsnote{margin-top:14px;padding:13px;background:#f0f5ff;border-radius:12px;color:#4b5c76;font-size:12px;line-height:1.55}.sources{margin-top:14px;font-size:12px;line-height:1.8;color:#667789}.sources a{color:var(--blue)}.notice{font-size:11px;color:#8a98a6;margin-top:12px}
+.tracepanel{padding:19px 20px;margin:15px 0}.traceheader{display:flex;align-items:start;justify-content:space-between;gap:12px}.traceheader h2{font:700 17px 'Space Grotesk';margin:0}.traceheader p{color:var(--muted);font-size:12px;margin:5px 0 0;line-height:1.5}.tracegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.traceevent{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fbfcfd;min-width:0}.traceevent h3{font:700 12px 'Space Grotesk';margin:0 0 7px;color:var(--blue)}.traceevent p{font-size:12px;line-height:1.55;margin:0;color:#526679;overflow-wrap:anywhere}.traceevent pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:7px 0 0;background:#f1f4f7;border-radius:8px;padding:9px;font:11px 'DM Mono';color:#284158}.traceevent.damage{background:#fff8f7;border-color:#f0d5d2}.traceevent.receive{background:#f6f3ff;border-color:#e4dcfb}.real-errors{margin:15px 0 0;padding:15px 16px;background:#f5f8fc;border:1px solid var(--line);border-radius:13px}.real-errors h3{font:700 14px 'Space Grotesk';margin:0 0 7px}.real-errors p{font-size:12px;line-height:1.6;color:#576b7e;margin:0}.real-errors .steps{margin-top:9px;font-size:12px;line-height:1.7;color:#465b6e}
+@media(max-width:900px){.row{grid-template-columns:1fr 1fr}.actions{grid-column:1/-1}.lanes{grid-template-columns:1fr 1fr}.track{grid-template-columns:1fr 70px 1fr}.stepbox{grid-template-columns:1fr}.layer{grid-template-columns:90px 1fr}.layer .analogy{grid-column:2}.hero-note{display:none}}@media(max-width:600px){.shell{padding:15px}.row{grid-template-columns:1fr}.actions{grid-column:auto;flex-wrap:wrap}.actions .btn{flex:1}.lanes{grid-template-columns:1fr 1fr;gap:7px}.method-card{padding:10px}.track{grid-template-columns:1fr 46px 1fr;gap:6px}.station{padding:10px;min-height:175px}.station h3{font-size:12px}.mono{font-size:10px}.lesson-grid,.tracegrid{grid-template-columns:1fr}.layer{grid-template-columns:1fr}.layer .analogy{grid-column:auto}.topright .pill:first-child{display:none}.hero{display:block}.sim{padding:14px}}
+</style>
+</head><body><div class="shell">
+<header class="top"><div class="brand"><div class="logo">↗</div><div class="brandname">Interactive Network Error Detection and Correction Toolkit<small>COMPUTER NETWORKS · PACKET INTEGRITY SIMULATOR</small></div></div><div class="topright"><span class="pill">Interactive simulator</span><span class="pill"><b>●</b> Local simulation</span></div></header>
+<section class="hero"><div><p class="eyebrow">INTERACTIVE NETWORK SIMULATION</p><h1>How do networks detect and correct bit errors?</h1><p>Follow a message from text to bits, through a simulated channel, to the receiver. Flip a data bit or check bit, then inspect how the receiver detects or corrects the change.</p></div><div class="hero-note">🧪 Classroom model only. No real network packets are sent.</div></section>
+<nav class="tabs"><button class="tab active" data-page="play">Interactive Simulation</button><button class="tab" data-page="industry">Industry Standards</button></nav>
+<main id="play" class="page active">
+<section class="panel setup"><h2 class="section-title">1 · Configure the transmission</h2><div class="row"><div class="field"><label for="message">Message payload</label><input id="message" maxlength="12" value="A" aria-label="Message"></div><div class="field"><label for="errorMode">Select where to inject a bit error</label><select id="errorMode"><option value="none">Clean transmission · no injected error</option><option value="payload">Message data bits</option><option value="check">Check bits (Hamming parity bits)</option><option value="any">Any bit in the frame</option></select></div><div class="actions"><button class="btn primary" id="run">Build frame</button><button class="btn" id="sample">Load sample message: HELLO</button></div></div><div class="help" id="modeHelp">Choose a method and error location, then build the frame. Click an enabled bit to flip it. Blue bits are message data; gold bits are check bits. Click again to undo a flip.</div><div class="bitpreview"><div class="bithead"><span>Transmitted frame · select an enabled bit to flip</span><span id="bitcount">8 data bits</span></div><div id="bitrow" class="bitrow"><span class="mutedline">Build a frame to inspect the transmitted bits.</span></div></div></section>
+<section class="lanes" id="methods"></section>
+<section class="panel sim"><div class="simhead"><div><h2 id="simTitle">Select an error-control method</h2><p id="simSubtitle">View how the selected method encodes and checks the message.</p></div><span class="counter" id="stepCounter">STEP 0 / 6</span></div><div class="track"><div class="station"><h3>📮 Sender</h3><div class="sub">Encodes the message and adds check information</div><div class="station-bubble"><div class="tinylabel" id="sendLabel">READY TO SEND</div><div class="mono" id="senderView">Your message starts here.</div><div class="visual-tag" id="senderTag">Message</div></div></div><div class="channel" id="channel"><div class="hazard">BIT FLIP INJECTED</div><div class="wire"></div><div class="packet" id="packet">✉</div><div class="channeltext">Simulated channel</div></div><div class="station"><h3>🏠 Receiver</h3><div class="sub">Checks or corrects the received frame</div><div class="station-bubble"><div class="tinylabel" id="recvLabel">NOT ARRIVED</div><div class="mono" id="receiverView">Waiting for the transmitted frame…</div><div class="visual-tag orange" id="receiverTag">Waiting</div></div></div></div><div class="stepbox"><div class="explain"><div class="stepname" id="stepKicker">TRANSMISSION WALKTHROUGH</div><h3 id="stepTitle">Start with a message</h3><p id="stepText">Enter a message, choose a method, and build the frame. Then inject an error to inspect the complete sender → channel → receiver process.</p></div><div class="buttonstack"><button class="btn primary" id="next" disabled>Next step →</button><button class="btn" id="auto" disabled>▶ Play walkthrough</button></div></div><div class="resultline" id="resultline"><span>💡</span><span><strong>Key idea:</strong> The receiver applies the same rule to the frame. Parity, checksum, and CRC detect many errors; Hamming can also correct a supported single-bit error.</span></div></section>
+<section class="panel tracepanel"><div class="traceheader"><div><h2>Internal Simulation Trace · Behind the scenes</h2><p>Inspect the sender frame, each injected bit change, the received frame, and the receiver calculation. Select a method and build a frame to view the trace.</p></div><span class="counter">SENDER → CHANNEL → RECEIVER</span></div><div id="backendTrace" class="tracegrid"><div class="traceevent"><h3>1 · Sender</h3><p>Waiting for a message.</p></div><div class="traceevent damage"><h3>2 · Channel</h3><p>No error has been injected.</p></div><div class="traceevent receive"><h3>3 · Receiver</h3><p>Waiting for the transmitted frame.</p></div><div class="traceevent"><h3>4 · Outcome</h3><p>Build a frame to see whether the method detects or corrects an error.</p></div></div></section><section class="panel lesson"><h2 class="section-title">Four Error-Control Methods</h2><div class="lesson-grid"><article class="lesson-card"><h3>① Parity · Count the 1s</h3><p>Add one bit so the total number of 1s is even. The receiver counts again. It is simple, but an even number of flips can go unnoticed.</p><div class="real">Useful as a simple, low-cost check for single-bit errors in basic links or memory.</div></article><article class="lesson-card"><h3>② Checksum · Add small pieces</h3><p>Add bytes, fold the carry, and attach the inverted sum. The receiver repeats the arithmetic. Some different changes can cancel each other out.</p><div class="real">Analogy: checking that the line items on a bill add up to the total.</div></article><article class="lesson-card"><h3>③ CRC-8 · Divide by a fixed pattern</h3><p>The sender and receiver use the same generator bit pattern. The remainder is the check value. CRC detects many accidental error patterns, but it does not repair data.</p><div class="real">Analogy: a seal designed to reveal many kinds of accidental damage.</div></article><article class="lesson-card"><h3>④ Hamming (7,4) · Locate and correct one bit</h3><p>Each group of 4 data bits gets 3 check bits. Failed checks form a syndrome that identifies a bit position. The receiver flips that bit in its local copy.</p><div class="real">A supported single-bit error can be corrected without retransmission. The receiver still calculates the syndrome and corrects its local copy.</div></article></div><div class="callout"><b>What this model covers:</b> This app uses small teaching versions: parity, an 8-bit checksum, CRC-8, and Hamming (7,4). Ethernet uses CRC-32; TCP and UDP use 16-bit checksums. See the Real-World Protocols tab for details.</div></section>
+</main>
+<main id="industry" class="page"><section class="panel industry"><p class="eyebrow">REAL-WORLD NETWORKING · SIMPLIFIED</p><h2>How real protocols handle errors and security</h2><p>These four methods teach the core ideas. Real networks combine error checks, delivery mechanisms, and security. A checksum or CRC detects many accidental changes; it does not encrypt data or verify the sender’s identity.</p><div class="stack">
+<article class="layer"><div class="layer-tag">LINK / FRAME</div><div><h3>Ethernet · CRC-32 FCS</h3><p>Ethernet appends a Frame Check Sequence (FCS) to each frame. Its CRC-32 detects many accidental bit errors. A frame that fails the check is discarded; CRC does not repair it.</p></div><div class="analogy"><b>Parcel analogy:</b> a damage-detecting seal. If the check fails, the frame is discarded; a higher layer may arrange another send.</div></article>
+<article class="layer"><div class="layer-tag">TRANSPORT</div><div><h3>TCP · checksum + sequence numbers + ACKs</h3><p>TCP calculates a 16-bit one’s-complement checksum over a pseudo-header, header, and data. Sequence numbers and acknowledgements track received data; retransmission recovers missing segments. The checksum does not repair corrupted data.</p></div><div class="analogy"><b>Tracked delivery:</b> each part is numbered; the receiver reports what arrived; the sender resends missing data.</div></article>
+<article class="layer"><div class="layer-tag">TRANSPORT</div><div><h3>UDP · checksum without TCP's delivery guarantee</h3><p>UDP uses a checksum to detect errors. IPv4 permits a zero checksum in limited cases; IPv6 generally requires one. UDP itself does not guarantee delivery, ordering, or retransmission. An application can add those features.</p></div><div class="analogy"><b>Quick postcard:</b> the receiver can check for damage, but the service does not promise to resend a lost postcard.</div></article>
+<article class="layer"><div class="layer-tag">SECURITY</div><div><h3>TLS 1.3 · authenticated encryption (AEAD)</h3><p>TLS 1.3 uses authenticated encryption with associated data (AEAD) to encrypt records and verify an authentication tag. A record that fails authentication is rejected. This keyed cryptographic protection is different from CRC or parity.</p></div><div class="analogy"><b>Locked, tamper-evident parcel:</b> outsiders cannot read the contents, and a change fails the keyed seal check.</div></article>
+</div><section class="real-errors"><h3>How can a transmission error occur in a real network?</h3><p>A network sends bits as electrical, optical, or radio signals. The receiver measures each signal and interprets it as a 0 or 1. Noise, interference, a weak signal, damaged cables or connectors, or timing problems can distort the signal or prevent it from being read correctly. These errors are usually accidental; they do not imply that someone deliberately changed the message.</p><div class="steps"><b>Real transmission:</b> Application message → bytes and bits → electrical, optical, or radio signals → channel → receiver interprets the signals → integrity check → damaged frame is discarded or a higher-level protocol attempts recovery.<br><b>Our simulation:</b> Enter a message → encode its bits and check value → click a bit to deliberately flip 0 ↔ 1 → run the receiver check → inspect detection or correction. The app changes the bit directly; it does not model physical signals, interference, cables, or network hardware.</div></section><div class="standardsnote"><b>Why does this toolkit use simplified methods?</b> Each model isolates one idea: parity uses counting, checksum uses addition, CRC uses polynomial division, and Hamming demonstrates error correction. Small examples make each bit visible. The CRC-8 in this app is for teaching; it is not the CRC or checksum used by TCP, UDP, Ethernet, or TLS.</div><div class="sources"><b>Standards references</b><br><a href="https://www.rfc-editor.org/rfc/rfc9293.html" target="_blank" rel="noreferrer">RFC 9293 — TCP</a> · <a href="https://www.rfc-editor.org/rfc/rfc768.html" target="_blank" rel="noreferrer">RFC 768 — UDP</a> · <a href="https://www.rfc-editor.org/rfc/rfc8446.html" target="_blank" rel="noreferrer">RFC 8446 — TLS 1.3</a> · <a href="https://standards.ieee.org/wp-content/uploads/import/documents/erratas/802.3ae-2002_errata.pdf" target="_blank" rel="noreferrer">IEEE 802.3 Ethernet reference</a></div><div class="notice">Educational model only. This page does not implement TCP, UDP, Ethernet, TLS, encryption, or live packet capture.</div></section></main>
+</div>
+<script>const METHODS = [
+  ['Parity', '☷', 'Adds one bit · detects odd numbers of flips'],
+  ['Checksum', 'Σ', 'Adds bytes · checks the folded sum'],
+  ['CRC-8', '⌁', 'Uses polynomial division · detects many error patterns'],
+  ['Hamming (7,4)', '✳', 'Adds 3 check bits per 4 data bits · corrects 1 bit per codeword']
+];
+const CRC_DIVISOR = '100000111';
+let state = { text:'A', method:0, frame:'', received:'', payloadBits:'', selected:[], steps:[], step:0, built:false, timer:null };
+const $ = id => document.getElementById(id);
+const bytesFor = text => Array.from(new TextEncoder().encode(text));
+const bitsFor = bytes => bytes.map(b => b.toString(2).padStart(8,'0')).join('');
+const hexFor = bytes => bytes.map(b => '0x' + b.toString(16).padStart(2,'0').toUpperCase()).join(' ');
+
+function createCards() {
+  $('methods').innerHTML = METHODS.map((m,i) =>
+    '<div class="method-card '+(i===state.method?'selected':'')+'" data-i="'+i+'"><div class="m-head"><b>'+m[0]+'</b><span class="icon">'+m[1]+'</span></div><div class="m-sub">'+m[2]+'</div><div class="m-status" id="status'+i+'">'+(i===state.method?'Selected · build frame':'Select this method')+'</div></div>'
+  ).join('');
+  document.querySelectorAll('.method-card').forEach(card => card.onclick = () => selectMethod(Number(card.dataset.i)));
+}
+function parityBit(bits) { return String(bits.split('').filter(b => b==='1').length % 2); }
+function sum8Trace(values) {
+  let sum = 0, rows = [];
+  values.forEach((value,index) => {
+    const before = sum, raw = sum + value;
+    sum = raw;
+    let folds = 0;
+    while (sum > 255) { sum = (sum & 255) + (sum >>> 8); folds++; }
+    rows.push('Byte '+(index+1)+': '+before.toString(16).padStart(2,'0').toUpperCase()+' + '+value.toString(16).padStart(2,'0').toUpperCase()+' = '+sum.toString(16).padStart(2,'0').toUpperCase()+(folds?' (end-around carry folded '+folds+' '+(folds===1?'time':'times')+')':''));
+  });
+  return {sum, rows};
+}
+function crcDivide(bits, divisor=CRC_DIVISOR) {
+  const work = bits.split('').map(Number), rows = [], width = divisor.length - 1;
+  for (let offset=0; offset<=work.length-divisor.length; offset++) {
+    if (!work[offset]) continue;
+    const before = work.join('');
+    for (let j=0; j<divisor.length; j++) work[offset+j] ^= Number(divisor[j]);
+    rows.push('Bit position '+(offset+1)+': XOR aligned generator'+String.fromCharCode(10)+'Before:   '+before+String.fromCharCode(10)+'Generator: '+' '.repeat(offset)+divisor+String.fromCharCode(10)+'After:    '+work.join(''));
+  }
+  return {remainder:work.slice(-width).join('').padStart(width,'0'), rows};
+}
+function encodeHamming(nibble) {
+  const word = Array(8).fill(0);
+  [3,5,6,7].forEach((position,index) => word[position] = Number(nibble[index] || 0));
+  const groups = [[1,[1,3,5,7]],[2,[2,3,6,7]],[4,[4,5,6,7]]];
+  const rows = [];
+  groups.forEach(([parityPosition,positions]) => {
+    const count = positions.filter(position => position!==parityPosition).reduce((total,position) => total+word[position],0);
+    word[parityPosition] = count % 2;
+    rows.push('P'+parityPosition+' checks positions '+positions.join(', ')+'. The data contains '+count+' bits set to 1, so set P'+parityPosition+' to '+word[parityPosition]+' to make the group even.');
+  });
+  return {word:word.slice(1).join(''), rows};
+}
+function isCheckBit(frameIndex) {
+  if (state.method !== 3) return frameIndex >= state.payloadBits.length;
+  return [1,2,4].includes((frameIndex % 7) + 1);
+}
+function makeFrame() {
+  const bytes = bytesFor(state.text);
+  state.payloadBits = bitsFor(bytes);
+  let frame = '';
+  if (state.method===0) frame = state.payloadBits + parityBit(state.payloadBits);
+  else if (state.method===1) {
+    const total = sum8Trace(bytes).sum;
+    frame = state.payloadBits + (((~total)&255).toString(2).padStart(8,'0'));
+  } else if (state.method===2) {
+    frame = state.payloadBits + crcDivide(state.payloadBits+'00000000').remainder;
+  } else {
+    for (let offset=0; offset<state.payloadBits.length; offset+=4) {
+      frame += encodeHamming(state.payloadBits.slice(offset,offset+4).padEnd(4,'0')).word;
+    }
+  }
+  state.frame = frame;
+  state.received = frame;
+  state.selected = [];
+  state.step = 0;
+  state.built = true;
+  state.steps = buildSteps();
+  renderAll();
+}
+function decodeBits(bits) {
+  if (bits.length % 8) return '[incomplete byte sequence]';
+  try {
+    const bytes = bits.match(/.{8}/g) || [];
+    return new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(bytes,b => parseInt(b,2)));
+  } catch { return '[not valid UTF-8 text]'; }
+}
+function receiverResult() {
+  const received = state.received, payloadLength = state.payloadBits.length;
+  const hasError = state.selected.length > 0;
+  if (state.method===0) {
+    const ones = received.split('').filter(b=>b==='1').length, pass = ones % 2 === 0;
+    return {status:pass?(hasError?'Error not detected · parity check passed':'Check passed'):'Error detected',type:pass?(hasError?'bad':'good'):'bad',detail:'Receiver counts '+ones+' bits set to 1 in the frame. The even-parity check '+(pass?'passes.':'fails.'),dataBits:received.slice(0,payloadLength),traceRows:['Received frame: '+received,'Bits set to 1: '+ones,'Even count required: '+(pass?'yes':'no'),'Parity check: '+(pass?'PASS':'FAIL')]};
+  }
+  if (state.method===1) {
+    const allBytes = (received.match(/.{8}/g)||[]).map(bits=>parseInt(bits,2));
+    const calculated = sum8Trace(allBytes), pass = calculated.sum===255;
+    return {status:pass?(hasError?'Error not detected · checksum check passed':'Check passed'):'Error detected',type:pass?(hasError?'bad':'good'):'bad',detail:'The receiver folds the received data and checksum byte to 0x'+calculated.sum.toString(16).padStart(2,'0').toUpperCase()+'. This model expects 0xFF.',dataBits:received.slice(0,payloadLength),traceRows:['Received bytes: '+hexFor(allBytes),...calculated.rows,'Final folded total: 0x'+calculated.sum.toString(16).padStart(2,'0').toUpperCase(),'Expected total: 0xFF','Checksum check: '+(pass?'PASS':'FAIL')]};
+  }
+  if (state.method===2) {
+    const division = crcDivide(received), pass = /^0+$/.test(division.remainder);
+    return {status:pass?(hasError?'Error not detected · CRC check passed':'Check passed'):'Error detected',type:pass?(hasError?'bad':'good'):'bad',detail:'The receiver divides the complete frame by '+CRC_DIVISOR+'. The remainder is '+division.remainder+'.',dataBits:received.slice(0,payloadLength),traceRows:['Received frame: '+received,'Generator: '+CRC_DIVISOR,...(division.rows.length?division.rows:['No XOR step was required.']),'Final 8-bit remainder: '+division.remainder,'Expected remainder: 00000000','CRC check: '+(pass?'PASS':'FAIL')]};
+  }
+  let correctedWords = [], receiverRows = [], correctedCount = 0, errorCounts = new Map();
+  state.selected.forEach(index => { const group=Math.floor(index/7); errorCounts.set(group,(errorCounts.get(group)||0)+1); });
+  let unsafe = Array.from(errorCounts.values()).some(count=>count>1);
+  for (let offset=0, group=1; offset<received.length; offset+=7,group++) {
+    const word = received.slice(offset,offset+7), bits=[0,...word].map(Number);
+    const s1=bits[1]^bits[3]^bits[5]^bits[7], s2=bits[2]^bits[3]^bits[6]^bits[7], s4=bits[4]^bits[5]^bits[6]^bits[7];
+    const syndrome = s1 + (2*s2) + (4*s4);
+    const corrected=bits.slice();
+    if (syndrome>0 && syndrome<=7) { corrected[syndrome]^=1; correctedCount++; }
+    const correctedWord=corrected.slice(1).join('');
+    correctedWords.push(correctedWord);
+    receiverRows.push('Codeword '+group+' received: '+word,'Checks: S1='+s1+', S2='+s2+', S4='+s4,'S4S2S1 = '+s4+s2+s1+' = '+syndrome+(syndrome?' → flip codeword bit '+syndrome:' → no bit indicated'),'After local correction: '+correctedWord);
+  }
+  const correctedFrame=correctedWords.join('');
+  const dataBits=[...correctedWords].map(word=>[2,4,5,6].map(index=>word[index]).join('')).join('').slice(0,payloadLength);
+  const hammingStatus=correctedCount?(unsafe?'Multiple errors in one codeword · correction is not guaranteed':(correctedCount===1?'One bit error corrected locally':correctedCount+' bit errors corrected locally')):(hasError?'Error not detected · all syndromes are zero':'Check passed');
+  const hammingDetail=unsafe?'Multiple selected errors landed in the same codeword. The receiver still applies the syndrome-guided flip, but the recovered result may be wrong.':'Syndrome bits identify the codeword position to flip. For a supported single-bit error, the receiver corrects its local copy without requesting a retransmission.';
+  return {status:hammingStatus,type:correctedCount?(unsafe?'bad':'fix'):(hasError?'bad':'good'),detail:hammingDetail,dataBits,correctedFrame,traceRows:['Received encoded frame: '+received,...receiverRows,'Corrected encoded frame: '+correctedFrame,'Extracted data bits: '+dataBits,'Correction: performed locally at the receiver; no retransmission round trip.']};
+}
+function senderDetails() {
+  const bytes=bytesFor(state.text), rows=['Application message: “'+state.text+'”','UTF-8 bytes: '+hexFor(bytes),'Original message bits ('+state.payloadBits.length+' bits): '+state.payloadBits];
+  if (state.method===0) {
+    const ones=state.payloadBits.split('').filter(b=>b==='1').length;
+    rows.push('Count the data 1-bits: '+ones+' ('+(ones%2?'odd':'even')+')','Parity bit added: '+parityBit(state.payloadBits),'Transmitted frame (data + parity bit):');
+  } else if (state.method===1) {
+    const sum=sum8Trace(bytes), checksum=(~sum.sum)&255;
+    rows.push('Add the message bytes (hex):',...sum.rows,'Folded sum: 0x'+sum.sum.toString(16).padStart(2,'0').toUpperCase(),'Invert the 8 sum bits → checksum: 0x'+checksum.toString(16).padStart(2,'0').toUpperCase(),'Transmitted frame (data bytes + checksum byte):');
+  } else if (state.method===2) {
+    const augmented=state.payloadBits+'00000000', division=crcDivide(augmented);
+    rows.push('CRC generator polynomial: '+CRC_DIVISOR+' (x^8 + x^2 + x + 1)','Append eight zero bits: '+augmented,'XOR long-division steps:',...(division.rows.length?division.rows:['No XOR step was required.']),'CRC-8 remainder: '+division.remainder,'Transmitted frame (data bits + CRC remainder):');
+  } else {
+    for(let offset=0,group=1;offset<state.payloadBits.length;offset+=4,group++) {
+      const nibble=state.payloadBits.slice(offset,offset+4).padEnd(4,'0'), encoded=encodeHamming(nibble);
+      rows.push('Codeword '+group+' data bits: '+nibble,...encoded.rows,'Encoded codeword, positions 1–7: '+encoded.word+' (P1, P2, and P4 are check bits).');
+    }
+    rows.push('Transmitted frame: all 7-bit codewords joined together.');
+  }
+  rows.push('SENDER FRAME: '+state.frame);
+  return rows;
+}
+function channelDetails() {
+  if (!state.selected.length) return ['No bit error was injected.','The transmitted and received frames are identical: '+state.frame,'This run models a clean channel. Real networks may still experience physical interference.'];
+  const changes=state.selected.map(index=>'Frame bit '+(index+1)+': '+state.frame[index]+' → '+state.received[index]+' ('+(isCheckBit(index)?'check bit':'message data bit')+').');
+  return ['You selected '+state.selected.length+' frame bit(s) to flip.',...changes,'TRANSMITTED FRAME: '+state.frame,'RECEIVED FRAME:    '+state.received,'This is a deliberate software-injected error. Physical interference is not simulated.'];
+}
+function buildTrace() {
+  const result=receiverResult();
+  return [
+    {title:'1 · Sender encodes the message',body:senderDetails()},
+    {title:'2 · Channel applies the selected fault',body:channelDetails(),kind:'damage'},
+    {title:'3 · Receiver runs '+METHODS[state.method][0],body:result.traceRows,kind:'receive'},
+    {title:'4 · Decision and recovered message',body:['Receiver result: '+result.status,'Recovered data bits: '+result.dataBits,'Recovered message: '+decodeBits(result.dataBits),...(result.correctedFrame?['Corrected codeword frame: '+result.correctedFrame]:[]),result.detail],kind:result.type}
+  ];
+}
+function renderTrace() {
+  const root=$('backendTrace'); root.replaceChildren();
+  buildTrace().forEach(event=>{
+    const card=document.createElement('article'); card.className='traceevent '+(event.kind||'');
+    const heading=document.createElement('h3'); heading.textContent=event.title; card.appendChild(heading);
+    event.body.forEach((line,index)=>{
+      if (line.includes(String.fromCharCode(10))) { const pre=document.createElement('pre'); pre.textContent=line; card.appendChild(pre); }
+      else { const p=document.createElement('p'); p.textContent=line; if(index>0)p.style.marginTop='5px'; card.appendChild(p); }
+    });
+    root.appendChild(card);
+  });
+}
+function buildSteps() {
+  const result=receiverResult(), method=METHODS[state.method][0];
+  let encoding='';
+  if(state.method===0) encoding='Count the message 1-bits, then add one parity bit to make the total even.';
+  else if(state.method===1) encoding='Add the message bytes with 8-bit end-around carry, then append the inverted sum as the checksum.';
+  else if(state.method===2) encoding='Append eight zero bits, divide with XOR using generator '+CRC_DIVISOR+', and append the remainder.';
+  else encoding='Split the data into groups of four bits and add three Hamming check bits to each group.';
+  const channel=state.selected.length?'Injected frame bit position(s): '+state.selected.map(n=>n+1).join(', ')+'. Each selected 0 changed to 1, or 1 changed to 0.':'No bit was changed during transmission.';
+  return [
+    {k:'STEP 1 · MESSAGE',t:'The application creates a message',p:'The sender starts with “'+state.text+'”. UTF-8 turns its characters into bytes; each byte is represented by eight bits.'},
+    {k:'STEP 2 · SENDER ENCODING',t:'The sender calculates check information',p:encoding+' Open the Internal Simulation Trace below to inspect the actual arithmetic, XOR division, or Hamming parity calculations for this message.'},
+    {k:'STEP 3 · TRANSMITTED FRAME',t:'The sender combines data and check bits',p:'The frame contains '+state.frame.length+' bits. Blue bits carry the message; gold bits carry check information. In Hamming mode, check bits sit inside each 7-bit codeword.'},
+    {k:'STEP 4 · CHANNEL',t:state.selected.length?'A bit error is injected':'The frame crosses a clean simulated channel',p:channel+' In a real network, noise or interference can distort a signal so the receiver reads the wrong bit. This app directly flips the selected bit.'},
+    {k:'STEP 5 · RECEIVER CHECK',t:'The receiver applies '+method,p:result.detail+' The Internal Simulation Trace shows each check calculation and, for Hamming, the corrected codeword.'},
+    {k:'STEP 6 · RESULT',t:result.status,p:'Recovered message: “'+decodeBits(result.dataBits)+'”. A passing check means no error was detected; some error patterns can go undetected. Hamming corrects locally only when each codeword has a supported single-bit error.'}
+  ];
+}
+function selectMethod(index) { state.method=index; if(state.built) makeFrame(); else renderAll(); }
+function renderBits() {
+  const row=$('bitrow');
+  if(!state.built) { row.innerHTML='<span class="mutedline">Build a frame to inspect the transmitted bits.</span>'; return; }
+  let html='';
+  const mode=$('errorMode').value;
+  for(let i=0;i<state.frame.length;i++) {
+    const check=isCheckBit(i), selected=state.selected.includes(i);
+    const disabled=mode==='none'||(mode==='payload'&&check)||(mode==='check'&&!check);
+    const classes='bit'+(check?' check':'')+(selected?' injected':'');
+    html+='<button class="'+classes+'" title="Frame bit '+(i+1)+' · '+(check?'check':'message data')+(disabled?' · not selectable in current error mode':' · click to flip')+'" data-bit="'+i+'" '+(disabled?'disabled':'')+'>'+state.received[i]+'</button>';
+    if((state.method===3&&(i+1)%7===0)||(state.method!==3&&i===state.payloadBits.length-1)) html+='<span class="bitgroup"></span>';
+  }
+  row.innerHTML=html;
+  row.querySelectorAll('[data-bit]').forEach(button=>button.addEventListener('click',()=>toggleBit(Number(button.dataset.bit))));
+  const checkCount=state.frame.split('').filter((_,i)=>isCheckBit(i)).length;
+  $('bitcount').textContent=state.payloadBits.length+' data bits · '+checkCount+' check bits · '+state.frame.length+' total';
+}
+function toggleBit(index) {
+  const mode=$('errorMode').value, check=isCheckBit(index);
+  if(mode==='none'||(mode==='payload'&&check)||(mode==='check'&&!check)) return;
+  state.selected=state.selected.includes(index)?state.selected.filter(i=>i!==index):state.selected.concat(index);
+  state.received=state.frame.split('').map((bit,i)=>state.selected.includes(i)?(bit==='0'?'1':'0'):bit).join('');
+  state.steps=buildSteps(); state.step=3; renderAll();
+}
+function renderStep() {
+  const step=state.steps[state.step]; if(!step)return;
+  $('stepKicker').textContent=step.k; $('stepTitle').textContent=step.t; $('stepText').textContent=step.p;
+  $('stepCounter').textContent='STEP '+(state.step+1)+' / '+state.steps.length;
+  $('next').disabled=state.step>=state.steps.length-1;
+  $('auto').textContent=state.timer?'⏸ Pause walkthrough':'▶ Play walkthrough';
+  $('senderView').textContent=state.step<1?state.text:state.step<2?state.payloadBits:state.frame;
+  $('sendLabel').textContent=state.step<1?'APPLICATION MESSAGE':state.step<2?'UTF-8 DATA BITS':'TRANSMITTED FRAME';
+  $('senderTag').textContent=state.step<2?'UTF-8 message':'Data + check';
+  const receiveResult=receiverResult();
+  $('receiverView').textContent=state.step<4?'Waiting for the frame…':state.step<5?state.received:(state.method===3?'Corrected frame:\n'+receiveResult.correctedFrame+'\nRecovered message:\n'+decodeBits(receiveResult.dataBits):decodeBits(receiveResult.dataBits));
+  $('recvLabel').textContent=state.step<4?'NOT ARRIVED':state.step<5?'FRAME RECEIVED · CHECKING':state.method===3?'CORRECTED FRAME + DATA':'RECOVERED DATA';
+  $('receiverTag').textContent=state.step<4?'Waiting':state.step<5?'Checking':receiverResult().status;
+  $('receiverTag').className='visual-tag '+(state.step>=5?(receiverResult().type==='fix'?'':'green'):'orange');
+  $('channel').classList.toggle('damaged',state.step>=3&&state.selected.length>0);
+  $('packet').textContent=state.step>=3&&state.selected.length?'⚡':'✉';
+  $('packet').classList.toggle('moving',state.step===3);
+  const result=receiverResult(),line=$('resultline');
+  line.className='resultline'+(state.step>=5?' '+result.type:'');
+  line.innerHTML=state.step>=5?'<span>'+(result.type==='good'?'✅':result.type==='fix'?'🛠️':'⚠️')+'</span><span><strong>'+result.status+'.</strong> '+result.detail+'</span>':'<span>💡</span><span><strong>Key idea:</strong> The receiver uses the matching rule to inspect the arriving frame.</span>';
+}
+function renderAll() {
+  createCards(); renderBits(); renderStep(); renderTrace();
+  $('simTitle').textContent=METHODS[state.method][0]+' walkthrough';
+  $('simSubtitle').textContent=['Add a parity bit to make the total number of 1s even.','Add the data bytes and append the checksum byte.','Calculate and verify the CRC remainder.','Use the syndrome to locate and correct one bit per codeword.'][state.method];
+  $('next').disabled=!state.built; $('auto').disabled=!state.built;
+  for(let i=0;i<4;i++) {
+    $('status'+i).textContent=i===state.method?(state.built?receiverResult().status:'Selected · build frame'):'Select this method';
+    $('status'+i).className='m-status '+(i===state.method&&state.built?receiverResult().type:'');
+  }
+}
+function advance() { if(state.step<state.steps.length-1){state.step++;renderStep();} }
+$('run').onclick=()=>{state.text=$('message').value.trim()||'A';$('message').value=state.text;makeFrame();};
+$('sample').onclick=()=>{$('message').value='HELLO';$('errorMode').value='payload';$('modeHelp').textContent='Example loaded. Click an enabled blue message bit to inject an error.';state.text='HELLO';makeFrame();};
+$('next').onclick=advance;
+$('auto').onclick=()=>{
+  if(state.timer){clearInterval(state.timer);state.timer=null;renderStep();return;}
+  advance();state.timer=setInterval(()=>{if(state.step>=state.steps.length-1){clearInterval(state.timer);state.timer=null;renderStep();}else advance();},2200);renderStep();
+};
+$('errorMode').onchange=()=>{
+  const mode=$('errorMode').value;
+  const help={
+    none:'Clean transmission selected. Bit flipping is disabled.',
+    payload:'Data-bit mode selected. Build the frame, then click a blue data bit to flip it.',
+    check:'Check-bit mode selected. Build the frame, then click a gold check bit to flip it. Hamming check bits are interleaved within each codeword.',
+    any:'Any-bit mode selected. Build the frame, then click any blue or gold bit to flip it.'
+  };
+  $('modeHelp').textContent=help[mode]; renderBits();
+};
+document.querySelectorAll('.tab').forEach(button=>button.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(tab=>tab.classList.toggle('active',tab===button));
+  document.querySelectorAll('.page').forEach(page=>page.classList.toggle('active',page.id===button.dataset.page));
+});
+createCards();
+</script></body></html>
+
+
+
+
+
