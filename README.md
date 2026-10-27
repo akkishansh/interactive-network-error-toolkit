@@ -2,6 +2,9 @@
 
 A self-contained browser-based educational simulator. Open index.html in Chrome, Edge, or Brave. It works without Python or an installation; an internet connection is only needed for the external standards links and optional web fonts.
 
+## Project Explanation Video
+[Watch or download the video](https://github.com/akkishansh/interactive-network-error-toolkit/releases/tag/v1.0.0)
+
 ## How to use
 1. Enter a short message, such as A or HELLO.
 2. Choose an error location: no error, a message data bit, a check bit, or any frame bit.
